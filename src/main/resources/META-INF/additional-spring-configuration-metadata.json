@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "La clave secreta (long, única y alfanumérica) utilizada para firmar el token JWT. Ejemplo: ecomarketSuperSecretKeyForJWTs1234567890!@#$%"
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "El tiempo de vida del token JWT, expresado en milisegundos. Ejemplo: 86400000 (24 horas)."
+    }
+  ]
+}

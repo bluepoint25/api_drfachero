@@ -1,2 +1,6 @@
+# Archivos generales de texto, config, Java, XML
+* text=auto eol=lf
+
+# Reglas específicas (mantener las existentes)
 /mvnw text eol=lf
 *.cmd text eol=crlf

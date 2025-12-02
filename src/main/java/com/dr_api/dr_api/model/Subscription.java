@@ -1,7 +1,6 @@
 package com.dr_api.dr_api.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "SUSCRIPCION")

@@ -6,9 +6,9 @@ import com.dr_api.dr_api.repository.SubscriptionRepository;
 import com.dr_api.dr_api.service.PatientService;
 import com.dr_api.dr_api.exception.PlanLimitExceededException; 
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional; // O usa org.springframework.transaction.annotation.Transactional;
+import jakarta.transaction.Transactional; // Usamos Jakarta para Spring Boot 3+
 import java.util.List;
-import java.util.Optional; // Necesario para findById
+import java.util.Optional; 
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -34,9 +34,13 @@ public class PatientServiceImpl implements PatientService {
         // 1. Obtener el tipo de plan (ej. 'PLAN_FREE', 'PLAN_PRO')
         String planType = subscriptionRepository.findPlanTypeByClinicaId(clinicaId);
         
+        // =============================================================
+        // MODIFICACIÓN: Asume PLAN_PRO si no hay suscripción (solución temporal)
+        // =============================================================
         if (planType == null) {
-            // Manejar caso donde no hay suscripción activa
-            throw new RuntimeException("Clínica sin suscripción activa.");
+            // Asume el plan PRO en desarrollo para evitar la excepción.
+            planType = "PLAN_PRO"; 
+            System.out.println("ADVERTENCIA: Usando PLAN_PRO por defecto. No se encontró suscripción activa para Clinica ID: " + clinicaId);
         }
 
         // 2. Verificar el límite si el plan es FREE
