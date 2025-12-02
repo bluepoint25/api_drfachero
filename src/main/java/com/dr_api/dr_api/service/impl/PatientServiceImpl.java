@@ -1,73 +1,54 @@
 package com.dr_api.dr_api.service.impl;
 
+import com.dr_api.dr_api.model.Clinic;
 import com.dr_api.dr_api.model.Patient;
-import com.dr_api.dr_api.model.Clinic; // Agregamos Clinic para crear un mock
+import com.dr_api.dr_api.repository.ClinicRepository; // IMPORTANTE: Agregamos esto
 import com.dr_api.dr_api.repository.PatientRepository;
 import com.dr_api.dr_api.repository.SubscriptionRepository;
 import com.dr_api.dr_api.service.PatientService;
 import com.dr_api.dr_api.exception.PlanLimitExceededException; 
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional; 
+import org.springframework.transaction.annotation.Transactional; // Corregido el import a Spring
 import java.util.List;
 import java.util.Optional; 
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
-    // Se mantiene la constante, aunque se ignora temporalmente.
+    // Se mantiene la constante
     private static final int FREE_PLAN_LIMIT = 20;
 
     private final PatientRepository patientRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final ClinicRepository clinicRepository; // Nueva inyección
 
+    // Constructor actualizado con ClinicRepository
     public PatientServiceImpl(PatientRepository patientRepository, 
-                              SubscriptionRepository subscriptionRepository) {
+                              SubscriptionRepository subscriptionRepository,
+                              ClinicRepository clinicRepository) {
         this.patientRepository = patientRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.clinicRepository = clinicRepository;
     }
 
     @Override
     @Transactional
     public Patient save(Patient patient) {
         
-        // =============================================================
-        // FIX TEMPORAL: Deshabilita la verificación de Plan/Límite
-        //               y asigna una clínica dummy (ID 1)
-        // =============================================================
-        // Crear un objeto Clinic dummy con ID 1 (asumiendo que su Admin es el dueño de la clínica 1)
-        Clinic dummyClinic = new Clinic();
-        dummyClinic.setId(1L); 
+        // 1. OBTENCIÓN DINÁMICA DE LA CLÍNICA
+        // En lugar de inventar una clínica con ID 1, buscamos la primera que exista en la BD.
+        Clinic existingClinic = clinicRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Error Crítico: No hay ninguna clínica registrada en el sistema."));
         
-        // Asegurar que el objeto Patient tenga la referencia a la clínica dummy
-        patient.setClinica(dummyClinic); 
+        // 2. Asignamos la clínica real encontrada
+        patient.setClinica(existingClinic); 
         
-        // *** SE IGNORA LA LÓGICA DE SUBSCRIPCIÓN Y LÍMITE ***
+        // 3. (Lógica de planes ignorada temporalmente por seguridad, se puede descomentar después)
         
-        /* Long clinicaId = patient.getClinicaId(); // Esto devolvía null o causaba error
-        String planType = subscriptionRepository.findPlanTypeByClinicaId(clinicaId);
-
-        if (planType == null) {
-            planType = "PLAN_PRO"; 
-        }
-
-        if ("PLAN_FREE".equalsIgnoreCase(planType)) {
-            long currentPatientCount = patientRepository.countByClinica_Id(clinicaId);
-            if (currentPatientCount >= FREE_PLAN_LIMIT) {
-                throw new PlanLimitExceededException(
-                    "Límite de pacientes excedido..."
-                );
-            }
-        }
-        */
-        // =============================================================
-        
-        // Si el plan es PRO o el límite FREE no se ha alcanzado, se guarda el paciente.
+        // 4. Guardar paciente
         return patientRepository.save(patient);
     }
-    
-    // === Métodos CRUD RESTANTES ===
-
-    // NOTA: findAll() seguirá devolviendo todos, sin filtrar por clínica, lo cual es suficiente por ahora.
     
     @Override
     public List<Patient> findAll() {

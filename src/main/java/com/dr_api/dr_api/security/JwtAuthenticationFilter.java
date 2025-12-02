@@ -33,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String path = request.getServletPath();
 
     return path.startsWith("/api/auth")
-        || path.startsWith("/api/patients")   // <-- EXCLUIDO DEL JWT
         || path.startsWith("/v3/api-docs")
         || path.startsWith("/swagger-ui");
 }

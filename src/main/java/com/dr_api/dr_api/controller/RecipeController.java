@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/recipes")
-// FIX: Cambiamos el origen para que coincida con el frontend
 @CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 
@@ -20,20 +19,31 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    // 1. GET: Listar todas las recetas (Para llenar la tabla)
+    // 1. GET
     @GetMapping
     public List<Recipe> getAll() {
         return recipeService.findAll();
     }
 
-    // 2. POST: Crear nueva receta
+    // 2. POST
     @PostMapping
     public ResponseEntity<Recipe> create(@Valid @RequestBody Recipe recipe) {
         Recipe newRecipe = recipeService.save(recipe);
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
-    // 3. DELETE: Eliminar receta por ID
+    // 3. PUT: Actualizar (NUEVO)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Recipe recipe) {
+        if (recipeService.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        recipe.setId(id);
+        Recipe updatedRecipe = recipeService.save(recipe);
+        return ResponseEntity.ok(updatedRecipe);
+    }
+
+    // 4. DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (recipeService.findById(id).isPresent()) {
