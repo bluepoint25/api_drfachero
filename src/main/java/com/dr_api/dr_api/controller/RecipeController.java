@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/recipes")
+// FIX: Cambiamos el origen para que coincida con el frontend
 @CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 

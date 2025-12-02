@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/appointments")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173") // Origen explícito para CORS
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -55,7 +55,7 @@ public class AppointmentController {
     }
     
     // =========================================================================
-    // === NUEVOS ENDPOINTS PARA EL DASHBOARD PRO (Resuelven "Failed to fetch") ===
+    // === ENDPOINTS PARA EL DASHBOARD PRO (IMPLEMENTACIÓN DE DATOS SIMULADOS) ===
     // =========================================================================
 
     // DTO para el gráfico de barras: { "label": "Ene", "value": 15 }
@@ -67,13 +67,14 @@ public class AppointmentController {
      */
     @GetMapping("/dashboard/citas-mensuales") 
     public List<MonthlyAppointmentSummary> getFinishedAppointmentsSummary() {
-        // Datos mock para el BarChart
+        // Retorna datos simulados para que el componente BarChart.jsx funcione
         return List.of(
-            new MonthlyAppointmentSummary("Ene", 15),
-            new MonthlyAppointmentSummary("Feb", 22),
-            new MonthlyAppointmentSummary("Mar", 18),
-            new MonthlyAppointmentSummary("Abr", 30),
-            new MonthlyAppointmentSummary("May", 25)
+            new MonthlyAppointmentSummary("Jul", 25),
+            new MonthlyAppointmentSummary("Ago", 32),
+            new MonthlyAppointmentSummary("Sep", 45),
+            new MonthlyAppointmentSummary("Oct", 38),
+            new MonthlyAppointmentSummary("Nov", 50),
+            new MonthlyAppointmentSummary("Dic", 65)
         );
     }
     
@@ -86,11 +87,12 @@ public class AppointmentController {
      */
     @GetMapping("/dashboard/resumen-agenda")
     public List<AgendaSummaryItem> getAgendaSummary() {
-        // Datos mock para el resumen de Agenda
+        // Retorna datos simulados para que el resumen de agenda funcione
         return List.of(
-            new AgendaSummaryItem("Dra. Sánchez", "09:00", "Juan Pérez"),
+            new AgendaSummaryItem("Dr. Sánchez", "09:00", "Juan Pérez"),
             new AgendaSummaryItem("Dr. González", "11:30", "María López"),
-            new AgendaSummaryItem("Dra. Sánchez", "15:00", "Carlos Ruiz")
+            new AgendaSummaryItem("Dr. Fachero", "15:00", "Carlos Ruiz"),
+            new AgendaSummaryItem("Dr. Sánchez", "16:45", "Luisa Martínez")
         );
     }
 }

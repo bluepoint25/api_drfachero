@@ -10,7 +10,8 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/contacto") // Endpoint base: http://localhost:8080/api/contacto
-@CrossOrigin(origins = "http://localhost:5173") // PERMITE ACCESO DESDE REACT
+// FIX: Cambiamos el origen para que coincida con el frontend
+@CrossOrigin(origins = "http://localhost:5173") 
 public class ContactoController {
 
     private final ContactoService contactoService;

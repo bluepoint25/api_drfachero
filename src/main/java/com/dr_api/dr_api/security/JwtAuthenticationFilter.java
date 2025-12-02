@@ -28,6 +28,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
         this.adminDetailsService = adminDetailsService;
     }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+    String path = request.getServletPath();
+
+    return path.startsWith("/api/auth")
+        || path.startsWith("/api/patients")   // <-- EXCLUIDO DEL JWT
+        || path.startsWith("/v3/api-docs")
+        || path.startsWith("/swagger-ui");
+}
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, 

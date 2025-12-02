@@ -51,8 +51,10 @@ public class SecurityConfig {
             // CORS (Permite acceso desde el front-end)
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                // Permitir orígenes configurados en otros controllers y el nuevo endpoint
-                config.setAllowedOrigins(List.of("http://localhost:5173", "*")); 
+                
+                // FIX CLAVE: Quitamos "*" y solo listamos el origen de React
+                config.setAllowedOrigins(List.of("http://localhost:5173")); 
+                
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);

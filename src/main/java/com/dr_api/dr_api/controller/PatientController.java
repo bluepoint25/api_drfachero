@@ -14,7 +14,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
-@CrossOrigin(origins = "*") // Cambia esto para permitir todos los orígenes (solo desarrollo)
+// FIX: Cambiamos "*" por el origen exacto de desarrollo de React
+@CrossOrigin(origins = "http://localhost:5173") 
 public class PatientController {
 
     private final PatientService patientService;
