@@ -27,7 +27,7 @@ public class AdminService {
     @PostConstruct
     public void initializeUsers() {
         // 1. Crear ADMIN (Acceso a Dashboard PRO)
-        createUserIfNotExists("admin@drfachero.cl", "password123", "ROLE_ADMIN");
+        createUserIfNotExists("adminpro@drfachero.cl", "password123", "ROLE_ADMIN");
 
         // 2. Crear USUARIO ESTÁNDAR (Acceso a Dashboard Estándar)
         createUserIfNotExists("user@drfachero.cl", "password123", "ROLE_USER");
