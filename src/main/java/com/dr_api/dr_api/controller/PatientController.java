@@ -48,7 +48,7 @@ public class PatientController {
     public ResponseEntity<?> create(@Valid @RequestBody Patient patient) {
         try {
             Patient newPatient = patientService.save(patient);
-            return new ResponseEntity<>(newPatient, HttpStatus.CREATED);
+            return ResponseEntity.ok(newPatient);
         } catch (PlanLimitExceededException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {

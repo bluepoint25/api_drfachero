@@ -29,7 +29,7 @@ public class RecipeController {
     @PostMapping
     public ResponseEntity<Recipe> create(@Valid @RequestBody Recipe recipe) {
         Recipe newRecipe = recipeService.save(recipe);
-        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
+        return ResponseEntity.ok(newRecipe);
     }
 
     // 3. PUT: Actualizar (NUEVO)

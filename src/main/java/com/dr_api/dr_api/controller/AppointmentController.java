@@ -29,7 +29,7 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<Appointment> create(@Valid @RequestBody Appointment appointment) {
         Appointment newAppointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(newAppointment, HttpStatus.CREATED);
+        return ResponseEntity.ok(newAppointment);
     }
     
     // 3. PUT: Actualizar Cita Completa (NUEVO)

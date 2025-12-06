@@ -20,38 +20,33 @@ public class AdminService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Inicializa los usuarios por defecto al arrancar la aplicación.
-     * Crea un Admin (Pro) y un Usuario (Estándar).
-     */
     @PostConstruct
     public void initializeUsers() {
-        // 1. Crear ADMIN (Acceso a Dashboard PRO)
+        // 1. Crear ADMIN (El que tú quieres)
         createUserIfNotExists("adminpro@drfachero.cl", "password123", "ROLE_ADMIN");
 
-        // 2. Crear USUARIO ESTÁNDAR (Acceso a Dashboard Estándar)
+        // 2. Crear USUARIO ESTÁNDAR (Opcional)
         createUserIfNotExists("user@drfachero.cl", "password123", "ROLE_USER");
     }
 
     private void createUserIfNotExists(String username, String rawPassword, String role) {
+        // Verificamos si existe
         if (adminRepository.findByUsername(username).isEmpty()) {
             Admin user = new Admin();
             user.setUsername(username);
+            // AQUÍ ocurre la magia: Se encripta la contraseña real
             user.setPassword(passwordEncoder.encode(rawPassword));
             user.setRole(role);
             adminRepository.save(user);
-            logger.info(">>> [INIT] Usuario creado: {} / {} (Rol: {})", username, rawPassword, role);
+            logger.info(">>> [INIT] Usuario creado: {} (Rol: {})", username, role);
         } else {
-            logger.info(">>> [INIT] El usuario {} ya existe en la base de datos.", username);
+            logger.info(">>> [INIT] El usuario {} ya existe. Se omite creación.", username);
         }
     }
     
-    // Método para registro manual (opcional)
     public Admin save(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-        if (admin.getRole() == null) {
-            admin.setRole("ROLE_USER"); // Por defecto estándar si no se especifica
-        }
+        if (admin.getRole() == null) admin.setRole("ROLE_USER");
         return adminRepository.save(admin);
     }
 }
